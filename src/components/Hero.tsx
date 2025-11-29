@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button";
-import { Users, Award, Leaf, Target } from "lucide-react"; // Re-added Leaf and Target
+import { Users, Award, Leaf } from "lucide-react"; // Removed Target from imports as it's no longer used directly
 import heroImage from "@/assets/hero-eco.jpg";
 import { useNavigate } from "react-router-dom";
-import { Logo } from "@/components/Logo"; // Import the new Logo component
+import { Logo } from "@/components/Logo"; // Import the Logo component
 
 export function Hero() {
   const navigate = useNavigate();
@@ -17,15 +17,8 @@ export function Hero() {
         <div className="absolute inset-0 bg-gradient-to-br from-primary/80 via-primary/60 to-transparent"></div>
       </div>
 
-      {/* Floating elements */}
+      {/* Floating elements - Removed Leaf and Target */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {/* Re-added Leaf and Target as separate floating elements if they are not part of the main logo */}
-        <div className="absolute top-20 left-10 float-gentle">
-          <Leaf className="h-12 w-12 text-green-300/30" />
-        </div>
-        <div className="absolute top-40 right-20 float-gentle" style={{ animationDelay: '1s' }}>
-          <Target className="h-8 w-8 text-green-400/40" />
-        </div>
         <div className="absolute bottom-32 left-20 float-gentle" style={{ animationDelay: '2s' }}>
           <Users className="h-10 w-10 text-green-300/35" />
         </div>
@@ -36,7 +29,6 @@ export function Hero() {
 
       {/* Main content */}
       <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
-        {/* Monynha Eco Branding - now using the Logo component */}
         <div className="animate-fade-in-up mb-4" style={{ animationDelay: '0s' }}>
           <Logo 
             iconClassName="h-8 w-8 md:h-10 md:w-10 text-green-200" 

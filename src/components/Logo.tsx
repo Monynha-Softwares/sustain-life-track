@@ -1,5 +1,5 @@
 import React from 'react';
-import { Leaf } from 'lucide-react';
+import { Leaf, LucideIcon } from 'lucide-react'; // Import LucideIcon type
 import { cn } from '@/lib/utils';
 
 interface LogoProps {
@@ -8,6 +8,7 @@ interface LogoProps {
   textClassName?: string;
   showTagline?: boolean;
   taglineClassName?: string;
+  icon?: LucideIcon; // Add icon prop to allow custom icons
 }
 
 export function Logo({ 
@@ -15,12 +16,13 @@ export function Logo({
   iconClassName, 
   textClassName, 
   showTagline = false, 
-  taglineClassName 
+  taglineClassName,
+  icon: Icon = Leaf // Use Leaf as default icon if none is provided
 }: LogoProps) {
   return (
     <div className={cn("flex flex-col items-center", className)}>
       <div className="flex items-center">
-        <Leaf className={cn("mr-2 text-primary", iconClassName)} />
+        <Icon className={cn("mr-2 text-primary", iconClassName)} /> {/* Use the dynamic Icon prop */}
         <span className={cn("font-bold text-foreground", textClassName)}>Monynha Eco</span>
       </div>
       {showTagline && (
