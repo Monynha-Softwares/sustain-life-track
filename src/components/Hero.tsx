@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button";
-import { Users, Award, Leaf, ArrowRight } from "lucide-react"; // Added ArrowRight, Leaf is still needed for the Logo component if not explicitly passed
+import { Users, Award, Leaf, ArrowRight } from "lucide-react";
 import heroImage from "@/assets/hero-eco.jpg";
 import { useNavigate } from "react-router-dom";
-import { Logo } from "@/components/Logo"; // Import the Logo component
+import { Logo } from "@/components/Logo";
 
 export function Hero() {
   const navigate = useNavigate();
@@ -59,17 +59,18 @@ export function Hero() {
           <Button 
             className="btn-nature text-lg px-8 py-6" 
             size="lg" 
-            onClick={() => navigate('/app')}
+            onClick={() => navigate('/login')} // Changed to navigate to /login
           >
-            <ArrowRight className="mr-2" /> {/* Replaced Leaf with ArrowRight */}
+            <ArrowRight className="mr-2" />
             Start Your Eco Journey
           </Button>
           <Button 
             className="btn-floating text-lg px-8 py-6" 
             size="lg"
+            onClick={() => navigate('/demo')} // New button for demo
           >
             <Users className="mr-2" />
-            Join Community
+            See Demo
           </Button>
         </div>
 

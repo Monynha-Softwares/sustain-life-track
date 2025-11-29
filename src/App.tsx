@@ -4,9 +4,10 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import AppLayout from "./pages/AppLayout";
+import DemoLayout from "./pages/DemoLayout"; // Import the new DemoLayout
 import NotFound from "./pages/NotFound";
-import Login from "./pages/Login"; // Import the new Login page
-import { SessionContextProvider } from "./components/SessionContextProvider"; // Import SessionContextProvider
+import Login from "./pages/Login";
+import { SessionContextProvider } from "./components/SessionContextProvider";
 
 const queryClient = new QueryClient();
 
@@ -15,11 +16,12 @@ const App = () => (
     <TooltipProvider>
       <Sonner />
       <BrowserRouter>
-        <SessionContextProvider> {/* Wrap the entire app with SessionContextProvider */}
+        <SessionContextProvider>
           <Routes>
             <Route path="/" element={<Index />} />
-            <Route path="/login" element={<Login />} /> {/* Add the Login route */}
+            <Route path="/login" element={<Login />} />
             <Route path="/app/*" element={<AppLayout />} />
+            <Route path="/demo/*" element={<DemoLayout />} /> {/* Add the Demo route */}
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
