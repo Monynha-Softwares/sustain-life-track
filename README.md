@@ -2,7 +2,7 @@
 
 ## Project info
 
-**URL**: [https://eco.monynha.com]
+**URL**: [Your Monynha Eco Project URL]
 
 ## How can I edit this code?
 
@@ -59,3 +59,13 @@ This project is built with:
 - React
 - shadcn-ui
 - Tailwind CSS
+
+## How can I deploy this project?
+
+Simply use your preferred deployment method.
+
+## Can I connect a custom domain to my Monynha Eco project?
+
+Yes, you can!
+
+To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
