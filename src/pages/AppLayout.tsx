@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Dashboard } from "@/components/Dashboard";
 import { ActivityLogger } from "@/components/ActivityLogger";
 import { BottomNav } from "@/components/BottomNav";
+import { Footer } from "@/components/Footer"; // Import the new Footer component
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -254,6 +255,7 @@ const AppLayout = () => {
   return (
     <div className="min-h-screen bg-gradient-nature pb-20">
       {renderTabContent()}
+      <Footer /> {/* Add the Footer component here */}
       <BottomNav activeTab={activeTab} onTabChange={setActiveTab} />
     </div>
   );
