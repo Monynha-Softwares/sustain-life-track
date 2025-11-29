@@ -1,3 +1,153 @@
+# Monynha Eco — Sustain Life Track
+
+This repository contains the Sustain Life Track front-end application generated for a Monynha Eco project. It is a Vite + React + TypeScript application scaffolded to work with Monynha services (Monynha Eco) and common integrations like Supabase.
+
+**Project URL**: https://eco.monynha.com
+
+**Repository**: `sustain-life-track`
+
+---
+
+**What this README covers**
+- Project overview and goals
+- Local development and common commands (Windows PowerShell + cross-platform)
+- Environment variables and integrations (Supabase client)
+- Deployment guidance (Monynha, Vercel, Netlify)
+- Contributing, troubleshooting, and resources
+
+---
+
+**Quick summary**
+- Framework: Vite + React + TypeScript
+- UI: `shadcn-ui` components + Tailwind CSS
+- Integrations: Supabase client (see `src/integrations/supabase/client.ts`)
+
+---
+
+**Features**
+- Activity logging UI and dashboard
+- Mobile-aware layout and bottom navigation
+- Components organized using shadcn-ui primitives
+
+---
+
+**Prerequisites**
+- Node.js 18+ (use `nvm` or install from nodejs.org)
+- A package manager: `npm` (default), `pnpm`, or `yarn`
+
+Recommended (optional):
+- `pnpm` for faster installs in monorepos: `npm i -g pnpm`
+
+---
+
+**Local development (PowerShell)**
+Open PowerShell in the project root and run:
+
+```powershell
+# install deps
+npm install
+
+# start dev server
+npm run dev
+```
+
+If you prefer `pnpm`:
+
+```powershell
+pnpm install
+pnpm dev
+```
+
+Notes:
+- The dev server runs via Vite and supports HMR (hot module replacement).
+- The project uses TypeScript; your editor should provide TypeScript support for best DX.
+
+---
+
+**Scripts** (from `package.json`)
+- `npm run dev` — start development server (Vite)
+- `npm run build` — produce production build
+- `npm run preview` — locally preview production build
+- `npm run lint` — lint the codebase (if configured)
+
+---
+
+**Environment & Integrations**
+
+This project includes a Supabase integration. See `src/integrations/supabase/client.ts` for the client setup.
+
+Create a `.env` (or `.env.local`) in the project root with the variables your Supabase instance requires, for example:
+
+```
+VITE_SUPABASE_URL=https://your-supabase-url
+VITE_SUPABASE_ANON_KEY=your-anon-key
+```
+
+Notes:
+- Prefix client-side variables with `VITE_` so Vite exposes them to the browser.
+- Do not commit secrets to the repository.
+
+---
+
+**Project structure (key files)**
+- `src/main.tsx` — application entry
+- `src/App.tsx` — top-level app component
+- `src/pages` — route pages (Index, Login, NotFound, layouts)
+- `src/components` — UI components and `shadcn-ui` wrappers
+- `src/integrations/supabase/client.ts` — Supabase client configuration
+
+---
+
+**Deployment**
+
+Monynha Eco
+- If you are using Monynha Softwares to manage this project, push your branch and changes will be reflected in the Monynha project dashboard. Follow Monynha's deployment docs available in your Monynha project settings for automatic deployments.
+
+Vercel / Netlify / Cloud
+- Build command: `npm run build`
+- Publish directory: `dist`
+
+Example Vercel settings:
+- Build command: `npm run build`
+- Output directory: `dist`
+
+Environment variables (set in the deployment provider):
+- `VITE_SUPABASE_URL`
+- `VITE_SUPABASE_ANON_KEY`
+
+---
+
+**Contributing**
+- Make a branch for your change: `git checkout -b feat/your-change`
+- Commit and push: `git add .` then `git commit -m "feat: ..."` then `git push origin feat/your-change`
+- Open a Pull Request and request reviews.
+
+If you are using Monynha Softwares, changes pushed to the repo will be visible in the Monynha dashboard.
+
+---
+
+**Troubleshooting**
+- Dev server not starting: ensure Node.js version matches requirements and run `npm install` again.
+- Environment variables not available: confirm they are prefixed with `VITE_` for Vite to expose them.
+- Type errors: run `npm run dev` and check terminal for the TypeScript error details.
+
+---
+
+**Resources**
+- Monynha Eco project dashboard: https://monynha.eco/projects/
+- Vite docs: https://vitejs.dev/
+- React docs: https://reactjs.org/
+- Supabase docs: https://supabase.com/docs
+- shadcn-ui components: https://ui.shadcn.com/
+
+---
+
+If you'd like, I can also:
+- add a short `CONTRIBUTING.md` with PR guidelines
+- add example `.env.example` file
+- run a quick check that `src/integrations/supabase/client.ts` references environment variables correctly
+
+If you want me to proceed with any of those, tell me which.
 # Welcome to your Monynha Eco project
 
 ## Project info
