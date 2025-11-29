@@ -1,10 +1,11 @@
 import { Button } from "@/components/ui/button";
-import { Leaf, Target, Users, Award } from "lucide-react";
+import { Users, Award } from "lucide-react"; // Removed Leaf and Target as they are now part of Logo
 import heroImage from "@/assets/hero-eco.jpg";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useNavigate } from "react-router-dom";
+import { Logo } from "@/components/Logo"; // Import the new Logo component
 
 export function Hero() {
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate();
 
   return (
     <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
@@ -18,6 +19,7 @@ export function Hero() {
 
       {/* Floating elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {/* Re-added Leaf and Target as separate floating elements if they are not part of the main logo */}
         <div className="absolute top-20 left-10 float-gentle">
           <Leaf className="h-12 w-12 text-green-300/30" />
         </div>
@@ -34,14 +36,15 @@ export function Hero() {
 
       {/* Main content */}
       <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
-        {/* Monynha Eco Branding */}
+        {/* Monynha Eco Branding - now using the Logo component */}
         <div className="animate-fade-in-up mb-4" style={{ animationDelay: '0s' }}>
-          <h2 className="text-2xl md:text-3xl font-extrabold text-green-200 tracking-wide uppercase">
-            Monynha Eco
-          </h2>
-          <p className="text-lg text-green-100 italic mt-1">
-            Where every green step is a playful leap!
-          </p>
+          <Logo 
+            iconClassName="h-8 w-8 md:h-10 md:w-10 text-green-200" 
+            textClassName="text-2xl md:text-3xl font-extrabold text-green-200 tracking-wide uppercase"
+            showTagline={true}
+            taglineClassName="text-lg text-green-100 mt-1"
+            className="flex-col"
+          />
         </div>
 
         <div className="animate-fade-in-up" style={{ animationDelay: '0.2s' }}>

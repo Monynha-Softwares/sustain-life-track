@@ -1,8 +1,8 @@
 import { Auth } from '@supabase/auth-ui-react';
 import { ThemeSupa } from '@supabase/auth-ui-shared';
 import { supabase } from '@/integrations/supabase/client';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Leaf } from 'lucide-react';
+import { Card, CardContent, CardDescription, CardHeader } from '@/components/ui/card';
+import { Logo } from '@/components/Logo'; // Import the new Logo component
 
 function Login() {
   return (
@@ -10,8 +10,11 @@ function Login() {
       <Card className="w-full max-w-md card-nature">
         <CardHeader className="text-center">
           <div className="flex items-center justify-center mb-2">
-            <Leaf className="h-8 w-8 text-primary mr-2" />
-            <CardTitle className="text-3xl font-bold text-foreground">Monynha Eco</CardTitle>
+            <Logo 
+              iconClassName="h-8 w-8 text-primary" 
+              textClassName="text-3xl font-bold text-foreground"
+              className="flex-row"
+            />
           </div>
           <CardDescription className="text-muted-foreground">
             Sign in or create an account to start your eco journey!
