@@ -1,22 +1,22 @@
-# Welcome to your Lovable project
+# Welcome to your Monynha Eco project
 
 ## Project info
 
-**URL**: https://lovable.dev/projects/67a87542-29b6-495d-afe1-5ca1f9195c12
+**URL**: [Your Monynha Eco Project URL]
 
 ## How can I edit this code?
 
 There are several ways of editing your application.
 
-**Use Lovable**
+**Use Monynha Softwares**
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/67a87542-29b6-495d-afe1-5ca1f9195c12) and start prompting.
+Simply visit the [Monynha Eco Project](https://monynha.eco/projects/your-project-id) and start prompting.
 
-Changes made via Lovable will be committed automatically to this repo.
+Changes made via Monynha Softwares will be committed automatically to this repo.
 
 **Use your preferred IDE**
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Monynha Softwares.
 
 The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
 
@@ -62,12 +62,10 @@ This project is built with:
 
 ## How can I deploy this project?
 
-Simply open [Lovable](https://lovable.dev/projects/67a87542-29b6-495d-afe1-5ca1f9195c12) and click on Share -> Publish.
+Simply use your preferred deployment method.
 
-## Can I connect a custom domain to my Lovable project?
+## Can I connect a custom domain to my Monynha Eco project?
 
 Yes, you can!
 
 To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)

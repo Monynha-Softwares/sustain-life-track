@@ -1,6 +1,6 @@
-# AI Rules for Sustain-Life-Track Application
+# AI Rules for Monynha Eco Application
 
-This document outlines the core technologies and library usage guidelines for the Sustain-Life-Track application. These rules are designed to ensure consistency, maintainability, and adherence to best practices.
+This document outlines the core technologies and library usage guidelines for the Monynha Eco application. These rules are designed to ensure consistency, maintainability, and adherence to best practices.
 
 ## Tech Stack Description
 
