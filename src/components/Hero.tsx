@@ -1,8 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { Leaf, Target, Users, Award } from "lucide-react";
 import heroImage from "@/assets/hero-eco.jpg";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 export function Hero() {
+  const navigate = useNavigate(); // Initialize useNavigate
+
   return (
     <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background with overlay */}
@@ -48,7 +51,12 @@ export function Hero() {
         </div>
 
         <div className="animate-fade-in-up flex flex-col sm:flex-row gap-4 justify-center" style={{ animationDelay: '0.4s' }}>
-          <Button variant="nature" size="lg" className="text-lg px-8 py-6">
+          <Button 
+            variant="nature" 
+            size="lg" 
+            className="text-lg px-8 py-6"
+            onClick={() => navigate('/app')} // Navigate to /app
+          >
             <Leaf className="mr-2" />
             Start Your Eco Journey
           </Button>
