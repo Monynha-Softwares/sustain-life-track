@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Users, Award, Leaf } from "lucide-react"; // Removed Target from imports as it's no longer used directly
+import { Users, Award, Leaf, ArrowRight } from "lucide-react"; // Added ArrowRight, Leaf is still needed for the Logo component if not explicitly passed
 import heroImage from "@/assets/hero-eco.jpg";
 import { useNavigate } from "react-router-dom";
 import { Logo } from "@/components/Logo"; // Import the Logo component
@@ -17,7 +17,7 @@ export function Hero() {
         <div className="absolute inset-0 bg-gradient-to-br from-primary/80 via-primary/60 to-transparent"></div>
       </div>
 
-      {/* Floating elements - Removed Leaf and Target */}
+      {/* Floating elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute bottom-32 left-20 float-gentle" style={{ animationDelay: '2s' }}>
           <Users className="h-10 w-10 text-green-300/35" />
@@ -61,7 +61,7 @@ export function Hero() {
             size="lg" 
             onClick={() => navigate('/app')}
           >
-            <Leaf className="mr-2" />
+            <ArrowRight className="mr-2" /> {/* Replaced Leaf with ArrowRight */}
             Start Your Eco Journey
           </Button>
           <Button 
