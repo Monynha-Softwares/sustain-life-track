@@ -114,7 +114,3 @@ To maintain a consistent and efficient codebase, please adhere to the following 
 ## How can I deploy this project?
 
 Simply use your preferred deployment method.
-
-## Can I connect a custom domain to my Monynha Eco project?
-
-Yes, you can! To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
