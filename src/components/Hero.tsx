@@ -34,7 +34,17 @@ export function Hero() {
 
       {/* Main content */}
       <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
-        <div className="animate-fade-in-up">
+        {/* Monynha Eco Branding */}
+        <div className="animate-fade-in-up mb-4" style={{ animationDelay: '0s' }}>
+          <h2 className="text-2xl md:text-3xl font-extrabold text-green-200 tracking-wide uppercase">
+            Monynha Eco
+          </h2>
+          <p className="text-lg text-green-100 italic mt-1">
+            Where every green step is a playful leap!
+          </p>
+        </div>
+
+        <div className="animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
           <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
             Your Journey to
             <span className="block bg-gradient-to-r from-green-300 to-emerald-200 bg-clip-text text-transparent">
@@ -43,31 +53,33 @@ export function Hero() {
           </h1>
         </div>
 
-        <div className="animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+        <div className="animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
           <p className="text-xl md:text-2xl text-green-100 mb-8 leading-relaxed max-w-2xl mx-auto">
             Track eco-friendly actions, earn green points, and join a community 
             making the world better, one sustainable choice at a time.
           </p>
         </div>
 
-        <div className="animate-fade-in-up flex flex-col sm:flex-row gap-4 justify-center" style={{ animationDelay: '0.4s' }}>
+        <div className="animate-fade-in-up flex flex-col sm:flex-row gap-4 justify-center" style={{ animationDelay: '0.6s' }}>
           <Button 
-            variant="nature" 
+            className="btn-nature text-lg px-8 py-6" 
             size="lg" 
-            className="text-lg px-8 py-6"
-            onClick={() => navigate('/app')} // Navigate to /app
+            onClick={() => navigate('/app')}
           >
             <Leaf className="mr-2" />
             Start Your Eco Journey
           </Button>
-          <Button variant="floating" size="lg" className="text-lg px-8 py-6">
+          <Button 
+            className="btn-floating text-lg px-8 py-6" 
+            size="lg"
+          >
             <Users className="mr-2" />
             Join Community
           </Button>
         </div>
 
         {/* Stats preview */}
-        <div className="animate-fade-in-up mt-16 grid grid-cols-3 gap-8 max-w-2xl mx-auto" style={{ animationDelay: '0.6s' }}>
+        <div className="animate-fade-in-up mt-16 grid grid-cols-3 gap-8 max-w-2xl mx-auto" style={{ animationDelay: '0.8s' }}>
           <div className="text-center">
             <div className="text-3xl font-bold text-white mb-2">15K+</div>
             <div className="text-green-200 text-sm">Eco Warriors</div>
