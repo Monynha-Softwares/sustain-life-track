@@ -26,7 +26,8 @@ interface DashboardProps {
     type: string;
     description: string;
     points: number;
-    date: string;
+    created_at?: string;
+    date?: string;
   }>;
 }
 
@@ -157,7 +158,7 @@ export function Dashboard({ userStats, recentActivities }: DashboardProps) {
               <div className="flex-1">
                 <p className="font-medium text-foreground">{activity.description}</p>
                 <p className="text-sm text-muted-foreground">
-                  {new Date(activity.date).toLocaleDateString()}
+                  {new Date(activity.created_at || activity.date || '').toLocaleDateString()}
                 </p>
               </div>
               <Badge variant="secondary" className="eco-badge">
