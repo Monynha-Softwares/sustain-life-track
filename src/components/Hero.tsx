@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Users, Award } from "lucide-react"; // Removed Leaf and Target as they are now part of Logo
+import { Users, Award, Leaf, Target } from "lucide-react"; // Re-added Leaf and Target
 import heroImage from "@/assets/hero-eco.jpg";
 import { useNavigate } from "react-router-dom";
 import { Logo } from "@/components/Logo"; // Import the new Logo component
