@@ -4,17 +4,21 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { 
-  Bike, 
-  Recycle, 
-  Lightbulb, 
-  TreePine, 
-  Car, 
+import {
+  Bike,
+  Recycle,
+  Lightbulb,
+  TreePine,
+  Car,
   Droplets,
   CheckCircle2,
   Plus
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { supabase } from "@/integrations/supabase/client";
+import { useSession } from "@/components/SessionContextProvider";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 const activityCategories = [
   { id: 'transport', name: 'Transport', icon: Bike, color: 'bg-blue-100 text-blue-700', points: 10 },
@@ -26,40 +30,57 @@ const activityCategories = [
 ];
 
 interface ActivityLoggerProps {
-  onActivityLogged: (activity: any) => void;
+  refetchActivities: () => void;
 }
 
-export function ActivityLogger({ onActivityLogged }: ActivityLoggerProps) {
+export function ActivityLogger({ refetchActivities }: ActivityLoggerProps) {
+  const { user } = useSession();
   const [selectedCategory, setSelectedCategory] = useState<string>('');
   const [description, setDescription] = useState('');
   const [details, setDetails] = useState('');
-  const [isLogging, setIsLogging] = useState(false);
 
-  const handleLogActivity = async () => {
-    if (!selectedCategory || !description) return;
+  const addActivityMutation = useMutation({
+    mutationFn: async (newActivity: { type: string; description: string; details: string; points: number; user_id: string }) => {
+      const { data, error } = await supabase
+        .from('activities')
+        .insert([newActivity])
+        .select();
 
-    setIsLogging(true);
-    
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: () => {
+      toast.success('Eco Action Logged!', { description: 'You earned points for your sustainable effort!' });
+      refetchActivities(); // Trigger refetch in AppLayout
+      // Reset form
+      setSelectedCategory('');
+      setDescription('');
+      setDetails('');
+    },
+    onError: (error) => {
+      toast.error('Failed to log action', { description: error.message });
+    },
+  });
+
+  const handleLogActivity = () => {
+    if (!selectedCategory || !description || !user?.id) {
+      toast.error('Missing information', { description: 'Please select a category and add a description.' });
+      return;
+    }
+
     const category = activityCategories.find(cat => cat.id === selectedCategory);
-    const activity = {
-      id: Date.now().toString(),
+    if (!category) {
+      toast.error('Invalid category', { description: 'Please select a valid activity category.' });
+      return;
+    }
+
+    addActivityMutation.mutate({
       type: selectedCategory,
       description,
       details,
-      points: category?.points || 0,
-      date: new Date().toISOString(),
-    };
-
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    onActivityLogged(activity);
-    
-    // Reset form
-    setSelectedCategory('');
-    setDescription('');
-    setDetails('');
-    setIsLogging(false);
+      points: category.points,
+      user_id: user.id,
+    });
   };
 
   const selectedCategoryData = activityCategories.find(cat => cat.id === selectedCategory);
@@ -78,14 +99,14 @@ export function ActivityLogger({ onActivityLogged }: ActivityLoggerProps) {
           {activityCategories.map((category) => {
             const Icon = category.icon;
             const isSelected = selectedCategory === category.id;
-            
+
             return (
               <Card
                 key={category.id}
                 className={cn(
                   "p-4 cursor-pointer transition-all duration-300 hover:shadow-soft",
-                  isSelected 
-                    ? "ring-2 ring-primary bg-accent transform scale-105" 
+                  isSelected
+                    ? "ring-2 ring-primary bg-accent transform scale-105"
                     : "hover:bg-accent/50"
                 )}
                 onClick={() => setSelectedCategory(category.id)}
@@ -148,12 +169,12 @@ export function ActivityLogger({ onActivityLogged }: ActivityLoggerProps) {
 
           <Button
             onClick={handleLogActivity}
-            disabled={!description || isLogging}
+            disabled={!description || addActivityMutation.isPending}
             variant="nature"
             size="lg"
             className="w-full"
           >
-            {isLogging ? (
+            {addActivityMutation.isPending ? (
               <>
                 <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
                 Logging Action...

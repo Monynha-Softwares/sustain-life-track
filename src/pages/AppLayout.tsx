@@ -1,53 +1,114 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Dashboard } from "@/components/Dashboard";
 import { ActivityLogger } from "@/components/ActivityLogger";
 import { BottomNav } from "@/components/BottomNav";
-import { Footer } from "@/components/Footer"; // Import the new Footer component
+import { Footer } from "@/components/Footer";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { 
-  MessageSquare, 
-  Calendar, 
-  User, 
-  MapPin, 
+import {
+  MessageSquare,
+  Calendar,
+  User,
+  MapPin,
   Clock,
   Users,
   Heart,
-  MessageCircle
+  MessageCircle,
+  Loader2
 } from "lucide-react";
+import { useSession } from "@/components/SessionContextProvider";
+import { supabase } from "@/integrations/supabase/client";
+import { useQuery } from "@tanstack/react-query";
+import { toast } from "sonner";
+
+// Define the type for an activity fetched from Supabase
+interface EcoActivity {
+  id: string;
+  type: string;
+  description: string;
+  details: string | null;
+  points: number;
+  created_at: string;
+  user_id: string;
+}
 
 const AppLayout = () => {
+  const { user, isLoading: isSessionLoading } = useSession();
   const [activeTab, setActiveTab] = useState('home');
-  const [activities, setActivities] = useState([
-    {
-      id: '1',
-      type: 'transport',
-      description: 'Biked to work instead of driving',
-      points: 10,
-      date: new Date().toISOString(),
+
+  // Fetch activities from Supabase
+  const { data: activities, isLoading: isActivitiesLoading, error, refetch } = useQuery<EcoActivity[]>({
+    queryKey: ['ecoActivities', user?.id],
+    queryFn: async () => {
+      if (!user?.id) return [];
+      const { data, error: fetchError } = await supabase
+        .from('activities')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false });
+
+      if (fetchError) throw fetchError;
+      return data || [];
     },
-    {
-      id: '2',
-      type: 'recycling',
-      description: 'Separated plastic and paper waste',
-      points: 5,
-      date: new Date(Date.now() - 86400000).toISOString(),
+    enabled: !!user?.id, // Only run query if user is logged in
+  });
+
+  // Calculate user stats based on fetched activities
+  const userStats = useMemo(() => {
+    if (!activities) {
+      return {
+        totalPoints: 0,
+        weeklyGoal: 200, // Default goal
+        currentStreak: 0,
+        totalActivities: 0,
+        weeklyProgress: 0,
+      };
     }
-  ]);
 
-  const userStats = {
-    totalPoints: 125,
-    weeklyGoal: 200,
-    currentStreak: 7,
-    totalActivities: 23,
-    weeklyProgress: 62.5,
-  };
+    const totalPoints = activities.reduce((sum, activity) => sum + activity.points, 0);
+    const totalActivities = activities.length;
 
-  const handleActivityLogged = (activity: any) => {
-    setActivities(prev => [activity, ...prev]);
-    // Show celebration animation or toast here
-  };
+    // Simple streak calculation (can be improved)
+    let currentStreak = 0;
+    if (activities.length > 0) {
+      const sortedActivities = [...activities].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+      let lastDate: Date | null = null;
+      for (const activity of sortedActivities) {
+        const activityDate = new Date(activity.created_at);
+        activityDate.setHours(0, 0, 0, 0); // Normalize to start of day
+
+        if (!lastDate) {
+          currentStreak = 1;
+        } else {
+          const diffTime = Math.abs(activityDate.getTime() - lastDate.getTime());
+          const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+          if (diffDays === 1) { // Consecutive day
+            currentStreak++;
+          } else if (diffDays > 1) { // Gap in streak
+            break;
+          }
+        }
+        lastDate = activityDate;
+      }
+    }
+
+    const weeklyGoal = 200; // Example weekly goal
+    const weeklyProgress = (totalPoints / weeklyGoal) * 100;
+
+    return {
+      totalPoints,
+      weeklyGoal,
+      currentStreak,
+      totalActivities,
+      weeklyProgress: Math.min(100, weeklyProgress), // Cap at 100%
+    };
+  }, [activities]);
+
+  if (error) {
+    toast.error('Error fetching activities', { description: error.message });
+  }
 
   const feedPosts = [
     {
@@ -107,16 +168,24 @@ const AppLayout = () => {
   ];
 
   const renderTabContent = () => {
+    if (isSessionLoading || isActivitiesLoading) {
+      return (
+        <div className="min-h-screen flex items-center justify-center">
+          <Loader2 className="h-10 w-10 animate-spin text-primary" />
+        </div>
+      );
+    }
+
     switch (activeTab) {
       case 'home':
         return (
           <div className="space-y-8">
-            <Dashboard userStats={userStats} recentActivities={activities} />
+            <Dashboard userStats={userStats} recentActivities={activities || []} />
           </div>
         );
 
       case 'log':
-        return <ActivityLogger onActivityLogged={handleActivityLogged} />;
+        return <ActivityLogger refetchActivities={refetch} />;
 
       case 'feed':
         return (
@@ -125,7 +194,7 @@ const AppLayout = () => {
               <h2 className="text-2xl font-bold text-foreground mb-2">Community Feed</h2>
               <p className="text-muted-foreground">See what other eco warriors are doing</p>
             </div>
-            
+
             <div className="space-y-4">
               {feedPosts.map((post) => (
                 <Card key={post.id} className="p-4 card-nature">
@@ -139,9 +208,9 @@ const AppLayout = () => {
                       </div>
                       <Badge variant="secondary">+{post.points} pts</Badge>
                     </div>
-                    
+
                     <p className="text-foreground">{post.activity}</p>
-                    
+
                     <div className="flex items-center justify-between text-sm text-muted-foreground">
                       <span>{post.time}</span>
                       <div className="flex items-center space-x-4">
@@ -169,13 +238,13 @@ const AppLayout = () => {
               <h2 className="text-2xl font-bold text-foreground mb-2">Local Events</h2>
               <p className="text-muted-foreground">Join your community in making a difference</p>
             </div>
-            
+
             <div className="space-y-4">
               {events.map((event) => (
                 <Card key={event.id} className="p-4 card-nature">
                   <div className="space-y-3">
                     <h3 className="font-semibold text-foreground">{event.title}</h3>
-                    
+
                     <div className="space-y-2 text-sm text-muted-foreground">
                       <div className="flex items-center space-x-2">
                         <Calendar className="h-4 w-4" />
@@ -194,7 +263,7 @@ const AppLayout = () => {
                         <span>{event.participants} participants</span>
                       </div>
                     </div>
-                    
+
                     <Button variant="nature" size="sm" className="w-full">
                       RSVP to Event
                     </Button>
@@ -215,7 +284,7 @@ const AppLayout = () => {
               <h2 className="text-2xl font-bold text-foreground mb-2">Your Profile</h2>
               <p className="text-muted-foreground">Track your eco journey</p>
             </div>
-            
+
             <Card className="p-6 card-nature text-center">
               <h3 className="text-lg font-semibold mb-4">Eco Impact Summary</h3>
               <div className="grid grid-cols-2 gap-4">
@@ -232,30 +301,33 @@ const AppLayout = () => {
                   <div className="text-sm text-muted-foreground">Day Streak</div>
                 </div>
                 <div>
-                  <div className="text-2xl font-bold text-primary">12</div>
+                  <div className="text-2xl font-bold text-primary">0</div> {/* Placeholder for badges */}
                   <div className="text-sm text-muted-foreground">Badges</div>
                 </div>
               </div>
             </Card>
-            
+
             <div className="space-y-3">
               <Button variant="outline" className="w-full">Edit Profile</Button>
               <Button variant="outline" className="w-full">Notification Settings</Button>
               <Button variant="outline" className="w-full">Privacy Settings</Button>
               <Button variant="outline" className="w-full">Help & Support</Button>
+              <Button variant="destructive" className="w-full" onClick={() => supabase.auth.signOut()}>
+                Sign Out
+              </Button>
             </div>
           </div>
         );
 
       default:
-        return <Dashboard userStats={userStats} recentActivities={activities} />;
+        return <Dashboard userStats={userStats} recentActivities={activities || []} />;
     }
   };
 
   return (
     <div className="min-h-screen bg-gradient-nature pb-20">
       {renderTabContent()}
-      <Footer /> {/* Add the Footer component here */}
+      <Footer />
       <BottomNav activeTab={activeTab} onTabChange={setActiveTab} />
     </div>
   );
