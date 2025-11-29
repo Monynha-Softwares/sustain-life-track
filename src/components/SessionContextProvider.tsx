@@ -1,7 +1,7 @@
 import React, { useState, useEffect, createContext, useContext } from 'react';
 import { Session, User } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
-import { useNavigate, useLocation } from 'react-router-dom'; // Import useLocation
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Toaster, toast } from 'sonner';
 
 interface SessionContextType {
@@ -17,7 +17,7 @@ export const SessionContextProvider: React.FC<{ children: React.ReactNode }> = (
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
-  const location = useLocation(); // Get current location
+  const location = useLocation();
 
   useEffect(() => {
     const { data: authListener } = supabase.auth.onAuthStateChange(
@@ -25,9 +25,10 @@ export const SessionContextProvider: React.FC<{ children: React.ReactNode }> = (
         if (currentSession) {
           setSession(currentSession);
           setUser(currentSession.user);
+          // If authenticated user is on login, home, or demo, redirect to app
           if (event === 'SIGNED_IN' || event === 'INITIAL_SESSION') {
-            if (location.pathname === '/login' || location.pathname.startsWith('/demo')) {
-              navigate('/app'); // Redirect to app on sign in if coming from login or demo
+            if (location.pathname === '/login' || location.pathname === '/' || location.pathname.startsWith('/demo')) {
+              navigate('/app');
             }
             toast.success('Welcome back!', { description: 'You have successfully logged in.' });
           }
@@ -35,8 +36,9 @@ export const SessionContextProvider: React.FC<{ children: React.ReactNode }> = (
           setSession(null);
           setUser(null);
           if (event === 'SIGNED_OUT') {
-            if (!location.pathname.startsWith('/demo')) { // Only redirect if not already in demo
-              navigate('/login'); // Redirect to login on sign out
+            // If signed out and not on home or demo, redirect to login
+            if (location.pathname !== '/' && !location.pathname.startsWith('/demo')) {
+              navigate('/login');
             }
             toast.info('Logged out', { description: 'You have been signed out.' });
           }
@@ -51,19 +53,27 @@ export const SessionContextProvider: React.FC<{ children: React.ReactNode }> = (
       setUser(initialSession?.user || null);
       setIsLoading(false);
       
+      const isHomePath = location.pathname === '/';
       const isDemoPath = location.pathname.startsWith('/demo');
+      const isLoginPath = location.pathname === '/login';
 
-      if (!initialSession && !isDemoPath && location.pathname !== '/login') {
-        navigate('/login');
-      } else if (initialSession && (location.pathname === '/login' || isDemoPath)) {
-        navigate('/app');
+      if (!initialSession) {
+        // If unauthenticated, allow access to home and demo, otherwise redirect to login
+        if (!isHomePath && !isDemoPath && !isLoginPath) {
+          navigate('/login');
+        }
+      } else {
+        // If authenticated, and on home, login, or demo, redirect to app
+        if (isHomePath || isLoginPath || isDemoPath) {
+          navigate('/app');
+        }
       }
     });
 
     return () => {
       authListener.subscription.unsubscribe();
     };
-  }, [navigate, location.pathname]); // Add location.pathname to dependencies
+  }, [navigate, location.pathname]);
 
   return (
     <SessionContext.Provider value={{ session, user, isLoading }}>
